@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS Automations — AI Solutions for Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --accent: #c8f55a;
+    --accent-dark: #a8d43a;
+    --gray: #1a1a1a;
+    --gray-mid: #2e2e2e;
+    --gray-light: #888;
+    --text-muted: #aaa;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Syne', sans-serif;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  nav a.nav-cta {
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  nav a.nav-cta:hover {
+    background: var(--accent-dark);
+    transform: scale(1.03);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,245,90,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,245,90,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(200,245,90,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(200,245,90,0.1);
+    border: 1px solid rgba(200,245,90,0.25);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    width: fit-content;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    max-width: 900px;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .hero h1 .accent-line {
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.9rem 2.2rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.9rem 2.2rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* SECTION SHARED */
+  section {
+    padding: 6rem 4rem;
+  }
+
+  .section-tag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-sub {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* WHAT I DO */
+  .services {
+    background: var(--gray);
+  }
+
+  .services-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 4rem;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--gray);
+    padding: 2.5rem;
+    transition: background 0.2s;
+  }
+
+  .service-card:hover {
+    background: var(--gray-mid);
+  }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(200,245,90,0.1);
+    border: 1px solid rgba(200,245,90,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    background: var(--black);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,245,90,0.3), transparent);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--gray);
+    border: 1px solid rgba(200,245,90,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+  }
+
+  .step h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .step p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* WHY ME */
+  .why {
+    background: var(--gray);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 4rem;
+  }
+
+  .why-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .why-item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .why-check {
+    width: 24px;
+    height: 24px;
+    background: rgba(200,245,90,0.15);
+    border: 1px solid rgba(200,245,90,0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .why-item h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .why-item p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .why-visual {
+    background: var(--gray-mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 2.5rem;
+  }
+
+  .why-visual-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 2rem;
+  }
+
+  .time-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .time-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .time-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .time-label span:last-child {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .time-bar-bg {
+    height: 8px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .time-bar {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1s ease;
+  }
+
+  .bar-before { background: rgba(255,255,255,0.2); width: 100%; }
+  .bar-after { background: var(--accent); width: 3%; }
+
+  /* CONTACT */
+  .contact {
+    background: var(--black);
+  }
+
+  .contact-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact-wrapper .section-title {
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-wrapper .section-sub {
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  .contact-form {
+    background: var(--gray);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: left;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--black);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.2);
+  }
+
+  .form-group select option {
+    background: var(--gray);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: rgba(200,245,90,0.4);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+    letter-spacing: 0.01em;
+  }
+
+  .form-submit:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+  }
+
+  .form-note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  /* SUCCESS MESSAGE */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .success-msg h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+
+  .success-msg p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .services-header { grid-template-columns: 1fr; gap: 2rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .why-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 540px) {
+    .steps { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+    .contact-form { padding: 1.5rem; }
+  }
+
+  /* FADE IN ANIMATION */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">JS<span>.</span>Automations</a>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-tag">AI Automation for Business</div>
+
+  <h1>
+    Stop doing work
+    <span class="accent-line">that AI can do</span>
+    for you.
+  </h1>
+
+  <p class="hero-sub">
+    I build custom AI automations that eliminate repetitive tasks, save your team dozens of hours every month, and run 24/7 without you lifting a finger.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Let's Talk →</a>
+    <a href="#services" class="btn-secondary">See What I Build</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">72+</span>
+      <span class="stat-label">Hours saved monthly with AI</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">20s</span>
+      <span class="stat-label">Average task completion time</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">Runs without you</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header fade-up">
+    <div>
+      <span class="section-tag">What I Build</span>
+      <h2 class="section-title">Custom AI automations for every part of your business</h2>
+    </div>
+    <p class="section-sub">Every automation is built specifically for your business — not a template, not a cookie-cutter solution. Built to fit how you work.</p>
+  </div>
+
+  <div class="services-grid fade-up">
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Client Onboarding</h3>
+      <p>Fully automated onboarding flow. Welcome emails, project briefs, CRM logging — done the second a client signs up. No manual work required.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📨</div>
+      <h3>Lead Follow-Up</h3>
+      <p>AI that reads incoming leads and sends personalized follow-up emails instantly, 24/7, without you ever touching your inbox.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📋</div>
+      <h3>Proposal Generation</h3>
+      <p>Turn a short intake form into a full custom proposal in seconds. AI writes it, formats it, and sends it to the client automatically.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔁</div>
+      <h3>Workflow Automation</h3>
+      <p>Connect your tools and eliminate the manual steps between them. If you're doing the same thing more than twice a week, it can be automated.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Reporting & Tracking</h3>
+      <p>Auto-generated reports, live dashboards, and client updates sent on schedule — without anyone compiling spreadsheets manually.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤖</div>
+      <h3>Custom AI Solutions</h3>
+      <p>Have a specific problem that needs solving? I'll build a custom AI solution tailored exactly to your workflow and business needs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <span class="section-tag fade-up">The Process</span>
+  <h2 class="section-title fade-up">From idea to running automation in days</h2>
+
+  <div class="steps">
+    <div class="step fade-up">
+      <div class="step-num">01</div>
+      <h4>Discovery Call</h4>
+      <p>We talk through your workflow, identify your biggest time drains, and map out exactly what to automate.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">02</div>
+      <h4>I Build It</h4>
+      <p>I design and build your custom automation using Make.com and AI — no code needed on your end.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">03</div>
+      <h4>You Review It</h4>
+      <p>I walk you through a live demo, make any adjustments, and make sure everything works exactly how you need it.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">04</div>
+      <h4>It Runs Forever</h4>
+      <p>Your automation goes live and runs 24/7. You get your time back starting day one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ME -->
+<section class="why" id="why">
+  <span class="section-tag fade-up">Why Work With Me</span>
+  <h2 class="section-title fade-up">Built for results, not complexity</h2>
+
+  <div class="why-grid">
+    <div class="why-list fade-up">
+      <div class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Built specifically for your business</h4>
+          <p>No generic templates. Every automation is designed around how you actually work and what your business actually needs.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Fast turnaround</h4>
+          <p>Most automations are live within 3-5 days. You start saving time immediately, not months from now.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>You don't need to be technical</h4>
+          <p>I handle everything. You just tell me what's taking too long and I'll build the solution.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Ongoing support included</h4>
+          <p>Your automation keeps running smoothly. If anything ever needs tweaking, I'm here to fix it fast.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-visual fade-up">
+      <p class="why-visual-title">Client Onboarding — Before vs After</p>
+      <div class="time-comparison">
+        <div class="time-row">
+          <div class="time-label">
+            <span>Before automation</span>
+            <span>2+ hours per client</span>
+          </div>
+          <div class="time-bar-bg">
+            <div class="time-bar bar-before"></div>
+          </div>
+        </div>
+        <div class="time-row">
+          <div class="time-label">
+            <span>After automation</span>
+            <span>20 seconds</span>
+          </div>
+          <div class="time-bar-bg">
+            <div class="time-bar bar-after"></div>
+          </div>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);">
+          <p style="font-size: 0.82rem; color: var(--text-muted); font-weight: 300; line-height: 1.65;">At 25 clients/month that's <strong style="color: var(--accent); font-family: 'Syne', sans-serif;">60+ hours saved every single month</strong> — time you get back to grow your business.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-wrapper">
+    <span class="section-tag fade-up">Get Started</span>
+    <h2 class="section-title fade-up">Ready to get your time back?</h2>
+    <p class="section-sub fade-up">Tell me about your business and what's eating your time. I'll get back to you within 24 hours.</p>
+<div class="contact-form fade-up">
+  <form id="form-container" action="https://formspree.io/f/mkoynnyj" method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" name="first_name" id="fname" placeholder="John" required />
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" name="last_name" id="lname" placeholder="Smith" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" name="email" id="email" placeholder="john@yourbusiness.com" required />
+    </div>
+
+    <div class="form-group">
+      <label>Business Type</label>
+      <select name="business_type" id="business" required>
+        <option value="" disabled selected>Select your industry</option>
+        <option>Web Development Agency</option>
+        <option>Marketing Agency</option>
+        <option>Design Agency</option>
+        <option>E-commerce</option>
+        <option>SaaS / Software</option>
+        <option>Consulting</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>What's taking up most of your time?</label>
+      <textarea name="message" id="message" placeholder="Tell me what's slowing you down — client onboarding, follow-ups, reporting, something else..." required></textarea>
+    </div>
+
+    <button type="submit" class="form-submit">Send Message →</button>
+
+    <p class="form-note">No spam. No fluff. Just a real conversation about how to save you time.</p>
+  </form>
+</div>
+      </div>
+
+      <div class="success-msg" id="success-msg">
+        <h3>Message sent ✓</h3>
+        <p>Thanks for reaching out. I'll be in touch within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">JS<span>.</span>Automations</a>
+  <p>© 2026 JS Automations. All rights reserved.</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  function handleSubmit() {
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!fname || !email || !message) {
+      alert('Please fill in your name, email, and message.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
